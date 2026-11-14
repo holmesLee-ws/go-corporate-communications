@@ -10,7 +10,7 @@
 
 ## 시작하기
 
-준비물은 Git, [GitHub CLI](https://cli.github.com)(`gh`), Claude Code 또는 Claude Desktop입니다. 비공개 리포이므로 먼저 GitHub에서 보낸 초대를 수락하고, 터미널에서 `gh auth login`으로 로그인합니다. 다른 설치는 필요 없습니다.
+준비물은 Git, [GitHub CLI](https://cli.github.com)(`gh`), [Claude Code](https://code.claude.com/docs) 또는 [Claude Desktop](https://claude.ai/download)입니다. Windows에서는 Git과 함께 설치되는 Git Bash나 PowerShell에서 아래 명령을 칩니다. 데스크탑 대신 원하는 폴더에 받아도 됩니다. 비공개 리포이므로 먼저 GitHub에서 보낸 초대를 수락하고, 터미널에서 `gh auth login`으로 로그인합니다. 다른 설치는 필요 없습니다.
 
 ```bash
 cd ~/Desktop
@@ -30,7 +30,7 @@ claude
 
 Code 탭에서 데스크탑의 `go-corporate-communications` 폴더를 선택합니다. Chat 탭이 아니라 Code 탭이어야 튜터 규칙이 적용됩니다.
 
-어느 쪽이든 「안녕」이라고 입력하면 시작합니다.
+어느 쪽이든 「안녕」이라고 입력하면 시작합니다. 기록 저장이나 웹 조사 때마다 권한 창이 뜨면 폴더 신뢰를 수락하지 않은 것입니다. 종료하고 다시 열어 신뢰를 고르세요.
 
 ## 이렇게 진행됩니다
 
@@ -69,4 +69,4 @@ Code 탭에서 데스크탑의 `go-corporate-communications` 폴더를 선택합
 
 ## 튜터가 쓰는 권한
 
-튜터는 묻지 않고 내 학습 기록, `learner/studio`의 HTML, `learner/projects`의 문서 초안을 쓰고, 웹을 조사하고, 만든 HTML을 열 수 있습니다. 그 밖의 파일을 고칠 때는 평소처럼 허락을 구합니다. 웹 조사 때는 질문과 주소가 외부 서비스로 전달되므로, 민감한 정보는 대화에 넣지 마세요.
+튜터는 묻지 않고 내 학습 기록, `learner/studio`의 HTML, `learner/projects`의 마크다운 문서 초안을 쓰고, 웹을 조사하고, 만든 HTML을 열 수 있습니다. 그 밖의 파일을 고칠 때는 평소처럼 허락을 구합니다. 웹 조사 때는 질문과 주소가 외부 서비스로 전달되므로, 민감한 정보는 대화에 넣지 마세요.

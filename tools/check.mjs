@@ -101,6 +101,9 @@ function checkDomestic(domestic, rows) {
     for (const m of line.matchAll(/제\d+조(?:의\d+)?/g)) {
       const owner = hits.filter((h) => h.end <= m.index).pop();
       if (!owner) { problems.push(`${id}: ${m[0]}의 법령명이 sources.md에 없음`); continue; }
+      // 법령명과 조문 사이에는 앞 조문(제목 포함)·구분자만 올 수 있다. 다른 이름이 끼면 소속을 정할 수 없다.
+      const between = line.slice(owner.end, m.index).replace(/제\d+조(?:의\d+)?(?:\([^)]*\))?/g, "").replace(/[\s,·]|및/g, "");
+      if (between) { problems.push(`${id}: ${m[0]}의 소속 법령을 정할 수 없음(「${owner.name}」 뒤에 「${between.slice(0, 15)}」)`); continue; }
       if (!artsOf(owner.name).has(m[0])) { problems.push(`${id}: ${owner.name} ${m[0]}이 sources.md에서 확인되지 않음`); continue; }
       const t = line.slice(m.index + m[0].length).match(/^\(([^)]*)\)/);
       if (t) {
@@ -130,14 +133,14 @@ function checkGlobal(global, rows) {
   const table = globalRows.map((r) => `${r.name} ${r.arts}`).join("\n");
   for (const [id, line] of global) {
     if (/^해당 없음/.test(line)) { if (!/^해당 없음 — .{8,}/.test(line)) problems.push(`${id}: 글로벌 비교 「해당 없음」의 이유가 없거나 짧음`); continue; }
-    for (const axis of line.split(" / ")) {
+    for (const axis of line.split(/\s\/\s?|\/\s/)) {
       const keys = [...new Set(GLOBAL_KEYS.flatMap((re) => [...axis.matchAll(re)].map((m) => m[0])))];
       if (!keys.length) { problems.push(`${id}: 글로벌 비교 축 「${axis.slice(0, 30)}…」에서 allowlist 식별자를 뽑지 못함`); continue; }
       const own = globalRows.filter((r) => keys.some((k) => `${r.name} ${r.arts}`.includes(k)));
       for (const k of keys) if (!table.includes(k)) problems.push(`${id}: 글로벌 식별자 「${k}」이 sources.md 글로벌 행에 없음`);
-      for (const m of axis.matchAll(/제(\d+)조/g)) {
-        const n = m[1];
-        const re = new RegExp(`(Art\\. ${n}\\b|s\\.${n}\\b|§\\d*\\.?${n}\\b)`);
+      for (const m of axis.matchAll(/제(\d+)조|Art\. (\d+)|\bs\.(\d+)|§([\d.]+)/g)) {
+        const n = (m[1] || m[2] || m[3] || m[4]).replace(/\./g, "\\.");
+        const re = m[4] ? new RegExp(`§${n}(?![\\d.])`) : new RegExp(`(Art\\. ${n}(?!\\d)|s\\.${n}(?!\\d))`);
         if (!own.some((r) => re.test(r.arts))) problems.push(`${id}: 글로벌 조항 ${m[0]}이 sources.md 해당 행에 없음`);
       }
     }
@@ -150,6 +153,12 @@ function checkRelease(rows) {
   if (pending.length) {
     const msg = `법률·시행령 ${pending.length}행이 law.go.kr로 재대조되지 않음: ${pending.map((r) => r.name).join(", ")}`;
     if (RELEASE) errors.push(msg); else notes.push(msg);
+  }
+  for (const r of rows) {
+    let host = "";
+    try { host = new URL(r.url).hostname; } catch { host = ""; }
+    if (r.path === "law.go.kr" && !/(^|\.)law\.go\.kr$/.test(host)) errors.push(`sources.md 「${r.name}」: 확인 경로 law.go.kr인데 URL 호스트가 ${host}`);
+    if (r.path === "krx" && host !== "law.krx.co.kr") errors.push(`sources.md 「${r.name}」: 확인 경로 krx인데 URL 호스트가 ${host}`);
   }
   const krx = rows.filter((r) => r.kind === "거래소 규정" && r.path !== "krx");
   if (krx.length) notes.push(`거래소 규정 ${krx.length}행이 거래소 규정 원문(krx)이 아닌 경로로 확인됨`);
