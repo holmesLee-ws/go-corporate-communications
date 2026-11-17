@@ -10,7 +10,7 @@
 
 ## 시작하기
 
-준비물은 Git, [GitHub CLI](https://cli.github.com)(`gh`), [Claude Code](https://code.claude.com/docs) 또는 [Claude Desktop](https://claude.ai/download)입니다. Windows에서는 Git과 함께 설치되는 Git Bash나 PowerShell에서 아래 명령을 칩니다. 데스크탑 대신 원하는 폴더에 받아도 됩니다. 비공개 리포이므로 먼저 GitHub에서 보낸 초대를 수락하고, 터미널에서 `gh auth login`으로 로그인합니다. 다른 설치는 필요 없습니다.
+준비물은 Git, [GitHub CLI](https://cli.github.com)(`gh`), [Claude Code](https://code.claude.com/docs) 또는 [Claude Desktop](https://claude.ai/download)입니다. Windows에서는 Git과 함께 설치되는 Git Bash나 PowerShell에서 아래 명령을 칩니다. 데스크탑 대신 원하는 폴더에 받아도 됩니다. 공개 리포라 초대 없이 받을 수 있습니다. 터미널에서 `gh auth login`으로 한 번 로그인합니다. 다른 설치는 필요 없습니다.
 
 ```bash
 cd ~/Desktop
